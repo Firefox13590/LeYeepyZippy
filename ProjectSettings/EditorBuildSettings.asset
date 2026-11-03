@@ -8,6 +8,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/settingup.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Dueling.unity
+    guid: be6ecf42d2f110343a4e3eadb57e1241
+  - enabled: 1
+    path: Assets/Scenes/Mario.unity
+    guid: de258bb653434974c9e6f5a6aba5b3f5
+  - enabled: 1
+    path: Assets/Scenes/Crusher.unity
+    guid: c0328cac44ac57546aadf4a8553de7d7
+  - enabled: 1
+    path: Assets/Scenes/CPOCC.unity
+    guid: 3175f491ab10c22409945dc1a9702c75
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e5aa9b2a94c495b4b8c492d73de62188, type: 2}
