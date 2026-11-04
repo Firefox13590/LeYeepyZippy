@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.SceneManagement;
 
 public class ChargementMIniJeux : MonoBehaviour
@@ -6,13 +8,20 @@ public class ChargementMIniJeux : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        foreach (var item in InputSystem.devices)
+        {
+            Debug.Log(item);
+            Debug.Log(item.description);
+        }
+
+        Debug.Log(XRController.leftHand);
+        Debug.Log(XRController.rightHand);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void LoadDuel()
