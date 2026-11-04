@@ -5,10 +5,11 @@ public class MarioParty : MonoBehaviour
 {
     [Min(1f)]
     public float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
-    [SerializeField, ReadOnly] float[] limitesMvtPlateformes = new float[2] { 2, -3 };
 
     [SerializeField] GameObject[] plateformes;
-    int targetPlateform = -1;
+    [SerializeField, ReadOnly] float[] limitesMvtPlateformes = new float[2] { 2, -3 };
+    [SerializeField, ReadOnly] int targetPlateform = -1;
+
     float
         cooldown = 0,
         downtime = 0;
