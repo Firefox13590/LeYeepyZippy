@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
@@ -10,12 +11,11 @@ public class Debugging : MonoBehaviour
     {
         Debug.Log(XRController.leftHand);
         Debug.Log(XRController.rightHand);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(XRController.leftHand);
-        Debug.Log(XRController.rightHand);
     }
 }
