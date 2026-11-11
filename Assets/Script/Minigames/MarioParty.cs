@@ -1,12 +1,15 @@
 using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MarioParty : MonoBehaviour
 {
     [Min(1f)]
     public float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
+    public Material[] materiauxCouleur;
 
-    [SerializeField] GameObject[] plateformes;
+    [SerializeField, Tooltip("Mettre le conteneur et non les éléments")]
+    GameObject[] plateformes, boutonsSelectionPlateformes;
     [SerializeField, ReadOnly] float[] limitesMvtPlateformes = new float[2] { 2, -3 };
     [SerializeField, ReadOnly] int targetPlateform = -1;
 
@@ -24,13 +27,35 @@ public class MarioParty : MonoBehaviour
     {
         if (plateformes != null && plateformes.Length == 1)
         {
-            GameObject parentPlateform = plateformes[0];
-            plateformes = new GameObject[parentPlateform.transform.childCount];
-            for (int i = 0; i < parentPlateform.transform.childCount; i++)
+            GameObject parent = plateformes[0];
+            plateformes = new GameObject[parent.transform.childCount];
+            for (int i = 0; i < parent.transform.childCount; i++)
             {
-                plateformes[i] = parentPlateform.transform.GetChild(i).gameObject;
+                plateformes[i] = parent.transform.GetChild(i).gameObject;
                 //Debug.Log(plateformes[i].transform.position);
             }
+        }
+        if (boutonsSelectionPlateformes != null && boutonsSelectionPlateformes.Length == 1)
+        {
+            GameObject parent = boutonsSelectionPlateformes[0];
+            boutonsSelectionPlateformes = new GameObject[parent.transform.childCount];
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                boutonsSelectionPlateformes[i] = parent.transform.GetChild(i).gameObject;
+                //Debug.Log(plateformes[i].transform.position);
+            }
+        }
+
+        List<Material> listMatsColor = new List<Material>(materiauxCouleur);
+        //Debug.Log(listMatsColor.Count);
+        for (int i = 0; i < 9; i++)
+        {
+            int randomIndex = Random.Range(0, listMatsColor.Count);
+
+            plateformes[i].GetComponent<MeshRenderer>().material = listMatsColor[randomIndex];
+            boutonsSelectionPlateformes[i].transform.GetChild(2).GetChild(0).GetComponent<MeshRenderer>().material = listMatsColor[randomIndex];
+
+            listMatsColor.RemoveAt(randomIndex);
         }
 
         cooldown = cooldownDuration;
@@ -52,8 +77,8 @@ public class MarioParty : MonoBehaviour
                 cooldown = cooldownDuration;
 
                 targetY = 1;
-                targetPlateform = Random.Range(0, plateformes.Length);
-                Debug.Log(plateformes[targetPlateform]);
+                //targetPlateform = Random.Range(0, plateformes.Length);
+                //Debug.Log(plateformes[targetPlateform]);
             }
         }
         else if (targetPlateform >= 0 && (isGoingDown || isGoingUp))
@@ -104,7 +129,7 @@ public class MarioParty : MonoBehaviour
                 downtime = downtimeDuration;
 
                 targetY = 0;
-                Debug.Log(plateformes[targetPlateform]);
+                //Debug.Log(plateformes[targetPlateform]);
             }
         }
     }
