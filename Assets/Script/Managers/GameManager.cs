@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
