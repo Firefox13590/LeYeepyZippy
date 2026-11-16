@@ -26,4 +26,11 @@ namespace Data
         /// </summary>
         CPOCC
     }
+
+
+    public enum Interaction
+    {
+        None = 0,
+        BoutonPlateforme
+    }
 }

@@ -1,9 +1,12 @@
+using Data;
 using NaughtyAttributes;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class MarioParty : MonoBehaviour
 {
+    public static GameObject boutonHighlight = null;
+
     [Min(1f)]
     public float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
     public Material[] materiauxCouleur;
@@ -22,6 +25,9 @@ public class MarioParty : MonoBehaviour
         isGoingDown = false,
         isUp = true,
         isGoingUp = false;
+
+    bool
+        canUpdateTargetPlatform = true;
 
     private void Awake()
     {
@@ -43,23 +49,18 @@ public class MarioParty : MonoBehaviour
             {
                 boutonsSelectionPlateformes[i] = parent.transform.GetChild(i).gameObject;
                 //Debug.Log(plateformes[i].transform.position);
+
+                boutonsSelectionPlateformes[i].transform.GetChild(2).GetChild(0).GetComponent<MeshRenderer>().material = plateformes[i].GetComponent<MeshRenderer>().material;
             }
-        }
-
-        List<Material> listMatsColor = new List<Material>(materiauxCouleur);
-        //Debug.Log(listMatsColor.Count);
-        for (int i = 0; i < 9; i++)
-        {
-            int randomIndex = Random.Range(0, listMatsColor.Count);
-
-            plateformes[i].GetComponent<MeshRenderer>().material = listMatsColor[randomIndex];
-            boutonsSelectionPlateformes[i].transform.GetChild(2).GetChild(0).GetComponent<MeshRenderer>().material = listMatsColor[randomIndex];
-
-            listMatsColor.RemoveAt(randomIndex);
         }
 
         cooldown = cooldownDuration;
         downtime = downtimeDuration;
+    }
+
+    private void OnEnable()
+    {
+        InteractionObject.OnInteract += UpdatetargetPlateform;
     }
 
     // Update is called once per frame
@@ -115,6 +116,9 @@ public class MarioParty : MonoBehaviour
 
                 isGoingUp = false;
                 isUp = true;
+
+                canUpdateTargetPlatform = true;
+                targetPlateform = -1;
             }
         }
         else if (isDown && downtime > 0)
@@ -131,6 +135,24 @@ public class MarioParty : MonoBehaviour
                 targetY = 0;
                 //Debug.Log(plateformes[targetPlateform]);
             }
+        }
+
+        for (int i = 0; i < boutonsSelectionPlateformes.Length; i++)
+        {
+            boutonsSelectionPlateformes[i].transform.GetChild(2).GetChild(0).gameObject.layer = 0;
+            if (boutonsSelectionPlateformes[i] == boutonHighlight)
+            {
+                boutonsSelectionPlateformes[i].transform.GetChild(2).GetChild(0).gameObject.layer = 10;
+            }
+        }
+    }
+
+    void UpdatetargetPlateform(Interaction interaction)
+    {
+        if (interaction == Interaction.BoutonPlateforme && canUpdateTargetPlatform)
+        {
+            targetPlateform = Array.IndexOf(boutonsSelectionPlateformes, boutonHighlight);
+            canUpdateTargetPlatform = false;
         }
     }
 }
