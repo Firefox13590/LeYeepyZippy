@@ -5,10 +5,17 @@ namespace Data
 {
     public enum SceneType
     {
+        None = 0,
+
         /// <summary>
         /// Menu, accueil.
         /// </summary>
+        Menu,
+        /// <summary>
+        /// Lobby, salle d'attente, accueil gameshow.
+        /// </summary>
         Lobby,
+
         /// <summary>
         /// Plateformes qui tombent comme mini-jeux champignon de Mario Party.
         /// </summary>
@@ -25,5 +32,12 @@ namespace Data
         /// Ça passe ou ça casse.
         /// </summary>
         CPOCC
+    }
+
+
+    public enum Interaction
+    {
+        None = 0,
+        BoutonPlateforme
     }
 }
