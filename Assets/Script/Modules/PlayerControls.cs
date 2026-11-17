@@ -118,7 +118,7 @@ public class PlayerControls : MonoBehaviour
             rb.AddTorque(ragdollTorque * mvtSpeed, ForceMode.Impulse);
             //rb.AddTorque(ragdollTorque);
 
-            Invoke(nameof(Death), 10f);
+            Invoke(nameof(Death), 5f);
         }
     }
 
