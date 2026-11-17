@@ -7,13 +7,13 @@ using UnityEditor;
 public class InfiniteGround : MonoBehaviour
 {
     public float groundLenghth = 30f;
-    public GameObject sol;
+    public GameObject questions;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("trigger"))
         {
-            Instantiate(sol, new Vector3(0, 0, 0),Quaternion.identity);
+            Instantiate(questions, new Vector3(1.99f, 0, 3f), Quaternion.identity);
         }
     }
 }
