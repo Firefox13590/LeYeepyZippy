@@ -1,4 +1,5 @@
 using Data;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,11 @@ public class PlayerControls : MonoBehaviour
     public float mvtSpeed = 5, rotSpeed = .1f;
     public float interactRange = 3;
     public bool debugMode = false;
+
+    [SerializeField, ReadOnly]
+    bool
+        canMove = true,
+        canLook = true;
 
     Camera cam;
     Rigidbody rb;
@@ -24,6 +30,8 @@ public class PlayerControls : MonoBehaviour
         moveAction = InputSystem.actions.FindAction("Player/Move");
         lookAction = InputSystem.actions.FindAction("Player/Look");
         InteractAction = InputSystem.actions.FindAction("Player/Interact");
+
+        //canMove = isHost;
     }
 
     // Update is called once per frame
@@ -34,8 +42,12 @@ public class PlayerControls : MonoBehaviour
             Debug.DrawLine(cam.transform.position, cam.transform.position + cam.transform.forward * interactRange, Color.red);
         }
 
-        moveInput = (transform.forward * moveAction.ReadValue<Vector2>().y + transform.right * moveAction.ReadValue<Vector2>().x) * mvtSpeed;
-        lookInput = new Vector3(-lookAction.ReadValue<Vector2>().y, lookAction.ReadValue<Vector2>().x, 0) * rotSpeed;
+        moveInput = (canMove) ?
+            (transform.forward * moveAction.ReadValue<Vector2>().y + transform.right * moveAction.ReadValue<Vector2>().x) * mvtSpeed
+            : Vector3.zero;
+        lookInput = (canLook) ?
+            new Vector3(-lookAction.ReadValue<Vector2>().y, lookAction.ReadValue<Vector2>().x, 0) * rotSpeed
+            : Vector3.zero;
         interactInput = InteractAction.ReadValue<float>();
 
         transform.Rotate(0, lookInput.y, 0);
@@ -50,7 +62,7 @@ public class PlayerControls : MonoBehaviour
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, interactRange))
         {
             //Debug.Log(hit.collider.gameObject, hit.collider.gameObject);
-            if (hit.collider.TryGetComponent<InteractionObject>(out InteractionObject interObj))
+            if (hit.collider.TryGetComponent(out InteractionObject interObj))
             {
                 //Debug.Log(hit.collider.gameObject, hit.collider.gameObject);
                 if (interObj.interaction == Interaction.BoutonPlateforme)
@@ -80,5 +92,40 @@ public class PlayerControls : MonoBehaviour
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector3(moveInput.x, rb.linearVelocity.y, moveInput.z);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Death"))
+        {
+            canMove = false;
+            rb.constraints = RigidbodyConstraints.None;
+
+            Vector3 ragdollForce, ragdollTorque;
+            ragdollForce = new Vector3(
+                Random.Range(1f, 10f),
+                Random.Range(1f, 10f),
+                Random.Range(1f, 10f));
+            //Debug.Log(ragdollForce);
+            rb.AddForce(ragdollForce * mvtSpeed, ForceMode.Impulse);
+            //rb.AddForce(ragdollForce, ForceMode.Impulse);
+
+            ragdollTorque = new Vector3(
+                Random.Range(1f, 10f),
+                Random.Range(1f, 10f),
+                Random.Range(1f, 10f));
+            Debug.Log(ragdollTorque);
+            rb.AddTorque(ragdollTorque * mvtSpeed, ForceMode.Impulse);
+            //rb.AddTorque(ragdollTorque);
+
+            Invoke(nameof(Death), 10f);
+        }
+    }
+
+
+
+    void Death()
+    {
+        Destroy(gameObject);
     }
 }
