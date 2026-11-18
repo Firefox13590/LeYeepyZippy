@@ -5,17 +5,16 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public int playerCount => players.Count;
 
 
-    [SerializeField, ReadOnly] SceneType currentSceneType = SceneType.Menu;
+    public int PlayerCount => players.Count;
+    [SerializeField, ReadOnly] SceneType currentSceneType;
 
-    List<GameObject> players;
+    List<GameObject> players, cameras;
 
     private void Awake()
     {
@@ -29,7 +28,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        Init();
+        OnSceneChange(SceneManager.GetActiveScene());
+    }
+    private void Start()
+    {
+        Debug.Log(Application.platform);
     }
     private void OnEnable()
     {
@@ -48,7 +51,7 @@ public class GameManager : MonoBehaviour
         players = GameObject.FindGameObjectsWithTag("Player").ToList();
     }
 
-    void OnSceneChange(Scene scene, LoadSceneMode _)
+    void OnSceneChange(Scene scene, LoadSceneMode _ = 0)
     {
         currentSceneType = Enum.TryParse<SceneType>(scene.name, true, out SceneType result) ? result : SceneType.None;
         if (currentSceneType == SceneType.None)

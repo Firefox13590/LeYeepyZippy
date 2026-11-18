@@ -5,11 +5,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerControls : MonoBehaviour
 {
+    [Header("Affectation dans l'inspecteur")]
     public bool isHost = false;
     public float mvtSpeed = 5, rotSpeed = .1f;
     public float interactRange = 3;
     public bool debugMode = false;
 
+    [Header("Visualisation des variables")]
     [SerializeField, ReadOnly]
     bool
         canMove = true,
@@ -67,7 +69,7 @@ public class PlayerControls : MonoBehaviour
                 //Debug.Log(hit.collider.gameObject, hit.collider.gameObject);
                 if (interObj.interaction == Interaction.BoutonPlateforme)
                 {
-                    MarioParty.boutonHighlight = hit.collider.gameObject;
+                    MarioParty.Instance.boutonHighlight = hit.collider.gameObject;
                 }
 
                 if (interactInput > .1f) interObj.Interact();
@@ -76,7 +78,7 @@ public class PlayerControls : MonoBehaviour
             {
                 if (isHost)
                 {
-                    MarioParty.boutonHighlight = null;
+                    MarioParty.Instance.boutonHighlight = null;
                 }
             }
         }
@@ -84,7 +86,7 @@ public class PlayerControls : MonoBehaviour
         {
             if (isHost)
             {
-                MarioParty.boutonHighlight = null;
+                MarioParty.Instance.boutonHighlight = null;
             }
         }
     }
@@ -114,11 +116,11 @@ public class PlayerControls : MonoBehaviour
                 Random.Range(1f, 10f),
                 Random.Range(1f, 10f),
                 Random.Range(1f, 10f));
-            Debug.Log(ragdollTorque);
+            //Debug.Log(ragdollTorque);
             rb.AddTorque(ragdollTorque * mvtSpeed, ForceMode.Impulse);
             //rb.AddTorque(ragdollTorque);
 
-            Invoke(nameof(Death), 5f);
+            Invoke(nameof(Death), 10f);
         }
     }
 
