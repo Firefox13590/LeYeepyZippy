@@ -5,7 +5,7 @@ namespace Data
 {
     public enum SceneType
     {
-        None = 0,
+        None = -1,
 
         /// <summary>
         /// Menu, accueil.

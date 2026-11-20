@@ -13,9 +13,7 @@ public class PlayerControls : MonoBehaviour
 
     [Header("Visualisation des variables")]
     [SerializeField, ReadOnly]
-    bool
-        canMove = true,
-        canLook = true;
+    bool canMove = true;
 
     Camera cam;
     Rigidbody rb;
@@ -35,7 +33,14 @@ public class PlayerControls : MonoBehaviour
 
         //canMove = isHost;
     }
-
+    private void OnEnable()
+    {
+        GameManager.OnMinigameEnd += () => canMove = false;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnMinigameEnd -= () => canMove = false;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -47,9 +52,8 @@ public class PlayerControls : MonoBehaviour
         moveInput = (canMove) ?
             (transform.forward * moveAction.ReadValue<Vector2>().y + transform.right * moveAction.ReadValue<Vector2>().x) * mvtSpeed
             : Vector3.zero;
-        lookInput = (canLook) ?
-            new Vector3(-lookAction.ReadValue<Vector2>().y, lookAction.ReadValue<Vector2>().x, 0) * rotSpeed
-            : Vector3.zero;
+        lookInput =
+            new Vector3(-lookAction.ReadValue<Vector2>().y, lookAction.ReadValue<Vector2>().x, 0) * rotSpeed;
         interactInput = InteractAction.ReadValue<float>();
 
         transform.Rotate(0, lookInput.y, 0);
@@ -90,12 +94,10 @@ public class PlayerControls : MonoBehaviour
             }
         }
     }
-
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector3(moveInput.x, rb.linearVelocity.y, moveInput.z);
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Death"))

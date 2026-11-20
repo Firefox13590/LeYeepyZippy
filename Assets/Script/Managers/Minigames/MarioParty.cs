@@ -17,7 +17,7 @@ public class MarioParty : MonoBehaviour
     [ReadOnly] public GameObject boutonHighlight = null;
     [SerializeField, ReadOnly] int targetPlateform = -1;
 
-    float[] limitesMvtPlateformes = new float[2] { 2, -3 };
+    readonly float[] limitesMvtPlateformes = new float[2] { 2, -3 };
     float
         cooldown = 0,
         downtime = 0;
@@ -35,7 +35,6 @@ public class MarioParty : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -70,12 +69,16 @@ public class MarioParty : MonoBehaviour
         cooldown = cooldownDuration;
         downtime = downtimeDuration;
     }
-
     private void OnEnable()
     {
         InteractionObject.OnInteract += UpdateTargetPlateform;
+        GameManager.OnMinigameEnd += () => isUp = isGoingUp = isDown = isGoingDown = false;
     }
-
+    private void OnDisable()
+    {
+        InteractionObject.OnInteract -= UpdateTargetPlateform;
+        GameManager.OnMinigameEnd -= () => isUp = isGoingUp = isDown = isGoingDown = false;
+    }
     // Update is called once per frame
     void Update()
     {
