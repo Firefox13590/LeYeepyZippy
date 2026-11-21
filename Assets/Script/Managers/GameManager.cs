@@ -12,10 +12,11 @@ public class GameManager : MonoBehaviour
     public static Action OnMinigameStart, OnMinigameEnd;
 
     public int PlayerCount => players.Count;
+    public List<Camera> Cameras { get; private set; }
 
     [SerializeField, ReadOnly] SceneType currentSceneType;
 
-    List<GameObject> players, cameras;
+    List<GameObject> players;
 
     private void Awake()
     {
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        Cameras = FindObjectsByType<Camera>().ToList();
 
         MinigameStart();
     }

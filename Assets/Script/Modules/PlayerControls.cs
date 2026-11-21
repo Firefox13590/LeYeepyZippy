@@ -17,7 +17,7 @@ public class PlayerControls : MonoBehaviour
 
     Camera cam;
     Rigidbody rb;
-    InputAction moveAction, lookAction, InteractAction;
+    InputAction moveAction, lookAction, interactAction;
     Vector3 moveInput, lookInput;
     float interactInput;
     RaycastHit hit;
@@ -29,7 +29,7 @@ public class PlayerControls : MonoBehaviour
 
         moveAction = InputSystem.actions.FindAction("Player/Move");
         lookAction = InputSystem.actions.FindAction("Player/Look");
-        InteractAction = InputSystem.actions.FindAction("Player/Interact");
+        interactAction = InputSystem.actions.FindAction("Player/Interact");
 
         //canMove = isHost;
     }
@@ -54,7 +54,7 @@ public class PlayerControls : MonoBehaviour
             : Vector3.zero;
         lookInput =
             new Vector3(-lookAction.ReadValue<Vector2>().y, lookAction.ReadValue<Vector2>().x, 0) * rotSpeed;
-        interactInput = InteractAction.ReadValue<float>();
+        interactInput = interactAction.ReadValue<float>();
 
         transform.Rotate(0, lookInput.y, 0);
 
