@@ -5,17 +5,20 @@ using UnityEngine;
 
 public class MarioParty : MonoBehaviour
 {
-    public static GameObject boutonHighlight = null;
+    public static MarioParty Instance;
 
-    [Min(1f)]
-    public float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
-    public Material[] materiauxCouleur;
-
-    [SerializeField, Tooltip("Mettre le conteneur et non les éléments")]
+    [Header("Affectation dans l'inspecteur")]
+    [SerializeField, Min(1f)]
+    float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
+    [SerializeField, Tooltip("Mettre le conteneur et non les ï¿½lï¿½ments")]
     GameObject[] plateformes, boutonsSelectionPlateformes;
-    [SerializeField, ReadOnly] float[] limitesMvtPlateformes = new float[2] { 2, -3 };
+    [SerializeField] GeneralSpawner spawner;
+
+    [Header("Visualisation des variables")]
+    [ReadOnly] public GameObject boutonHighlight = null;
     [SerializeField, ReadOnly] int targetPlateform = -1;
 
+    readonly float[] limitesMvtPlateformes = new float[2] { 2, -3 };
     float
         cooldown = 0,
         downtime = 0;
@@ -25,12 +28,24 @@ public class MarioParty : MonoBehaviour
         isGoingDown = false,
         isUp = true,
         isGoingUp = false;
+    bool canUpdateTargetPlatform = true;
 
     bool
         canUpdateTargetPlatform = true;
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+
+
         if (plateformes != null && plateformes.Length == 1)
         {
             GameObject parent = plateformes[0];
@@ -57,12 +72,18 @@ public class MarioParty : MonoBehaviour
         cooldown = cooldownDuration;
         downtime = downtimeDuration;
     }
-
     private void OnEnable()
     {
-        InteractionObject.OnInteract += UpdatetargetPlateform;
+        InteractionObject.OnInteract += UpdateTargetPlateform;
+        GameManager.OnMinigameEnd += () => isUp = isGoingUp = isDown = isGoingDown = false;
+        PlayerControls.OnPlayerDeath += AddSpectator;
     }
-
+    private void OnDisable()
+    {
+        InteractionObject.OnInteract -= UpdateTargetPlateform;
+        GameManager.OnMinigameEnd -= () => isUp = isGoingUp = isDown = isGoingDown = false;
+        PlayerControls.OnPlayerDeath -= AddSpectator;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -147,12 +168,20 @@ public class MarioParty : MonoBehaviour
         }
     }
 
-    void UpdatetargetPlateform(Interaction interaction)
+
+
+    void UpdateTargetPlateform(Interaction interaction)
     {
         if (interaction == Interaction.BoutonPlateforme && canUpdateTargetPlatform)
         {
             targetPlateform = Array.IndexOf(boutonsSelectionPlateformes, boutonHighlight);
+            boutonsSelectionPlateformes[targetPlateform].GetComponent<Animator>().SetTrigger("PlayAnimation");
             canUpdateTargetPlatform = false;
         }
+    }
+
+    void AddSpectator(GameObject _)
+    {
+        spawner.SpawnObject(0, false, false, false, true);
     }
 }

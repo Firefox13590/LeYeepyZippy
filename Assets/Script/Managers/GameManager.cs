@@ -5,17 +5,19 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public int playerCount => players.Count;
+    public static Action OnMinigameStart, OnMinigameEnd;
 
+    public List<GameObject> Players { get; private set; }
+    public int PlayerCount => Players.Count;
+    public List<Camera> Cameras { get; private set; }
+    public List<GameObject> MinigameBehaviours { get; private set; }
 
-    [SerializeField, ReadOnly] SceneType currentSceneType = SceneType.Menu;
+    [SerializeField, ReadOnly] SceneType currentSceneType;
 
-    List<GameObject> players;
 
     private void Awake()
     {
@@ -28,9 +30,11 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        Init();
     }
+    //private void Start()
+    //{
+    //    OnSceneChange(SceneManager.GetActiveScene());
+    //}
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneChange;
@@ -45,18 +49,43 @@ public class GameManager : MonoBehaviour
     private void Init()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+
+        Players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        Cameras = FindObjectsByType<Camera>().ToList();
+        MinigameBehaviours = GameObject.FindGameObjectsWithTag("MinigameBehaviour").ToList();
+
+        //foreach (var item in Players) Debug.Log(item, item);
+        //foreach (var item in Cameras) Debug.Log(item, item);
+        //foreach (var item in MinigameBehaviours) Debug.Log(item, item);
+
+        MinigameStart();
     }
 
-    void OnSceneChange(Scene scene, LoadSceneMode _)
+    void OnSceneChange(Scene scene, LoadSceneMode _ = 0)
     {
-        currentSceneType = Enum.TryParse<SceneType>(scene.name, true, out SceneType result) ? result : SceneType.None;
+        currentSceneType = Enum.TryParse(scene.name, true, out SceneType result) ? result : SceneType.None;
         if (currentSceneType == SceneType.None)
         {
-            Debug.LogError("Le nom de la scène n'est pas reconnue. Assurez-vous que le nom match les valeurs du Enum SceneType sauf SceneType.None");
+            Debug.LogError("Le nom de la scï¿½ne n'est pas reconnue. Assurez-vous que le nom match les valeurs du Enum SceneType sauf SceneType.None");
             return;
         }
 
         Init();
+    }
+
+    void ChangeScene(int scene)
+    {
+        SceneManager.LoadScene(scene);
+    }
+    void ChangeScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void MinigameStart() => OnMinigameStart?.Invoke();
+    public void MinigameEnd()
+    {
+        OnMinigameEnd?.Invoke();
+        Invoke(nameof(ChangeScene), 5);
     }
 }

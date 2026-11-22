@@ -5,7 +5,7 @@ namespace Data
 {
     public enum SceneType
     {
-        None = 0,
+        None = -1,
 
         /// <summary>
         /// Menu, accueil.
@@ -39,5 +39,19 @@ namespace Data
     {
         None = 0,
         BoutonPlateforme
+    }
+
+    public class Question
+    {
+        public string question;
+        public string[] reponses;
+        public int indexBonneReponse;
+
+        public Question(string question, string[] reponses, int indexBonneReponse)
+        {
+            this.question = question;
+            this.reponses = reponses;
+            this.indexBonneReponse = indexBonneReponse;
+        }
     }
 }

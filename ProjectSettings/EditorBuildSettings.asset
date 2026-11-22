@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: f8fddccc5b4d8a54dbd8a6cf51ef2d29
   - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: 81af5043d8bb57344bea8f05c91aaa8d
+  - enabled: 1
     path: Assets/Scenes/MarioParty.unity
     guid: 7e326bd4017f5cf4ca40265f762357d1
   m_configObjects:
