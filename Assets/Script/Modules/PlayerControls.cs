@@ -1,10 +1,14 @@
 using Data;
 using NaughtyAttributes;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class PlayerControls : MonoBehaviour
 {
+    public static Action<GameObject> OnPlayerDeath;
+
     [Header("Affectation dans l'inspecteur")]
     public bool isHost = false;
     public float mvtSpeed = 5, rotSpeed = .1f;
@@ -122,6 +126,7 @@ public class PlayerControls : MonoBehaviour
             rb.AddTorque(ragdollTorque * mvtSpeed, ForceMode.Impulse);
             //rb.AddTorque(ragdollTorque);
 
+            OnPlayerDeath?.Invoke(gameObject);
             Invoke(nameof(Death), 10f);
         }
     }

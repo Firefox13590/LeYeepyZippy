@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: d4333ef8e81e77148b0094d9172aaccc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - activeStreamMat: {fileID: 2100000, guid: 37fc9a4d6fd78d641ad9d833b4e077e3, type: 2}
+  - disabledStreamMat: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

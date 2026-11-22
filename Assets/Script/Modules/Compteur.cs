@@ -18,31 +18,47 @@ public class Compteur : MonoBehaviour
 
     [SerializeField, ReadOnly] int valeur;
 
-    bool peutUpdateAuto;
     TextMeshProUGUI text;
 
     private void Awake()
     {
-        peutUpdateAuto = estCompteurAuto;
         valeur = depart;
         text = GetComponent<TextMeshProUGUI>();
     }
     private void Start()
     {
         text.text = depart.ToString();
-        if (estCompteurAuto) InvokeRepeating(nameof(UpdateCompteur), delaiPremiereVariation, delaiEntreVariations);
+        if (estCompteurAuto) StartCompteur(delaiPremiereVariation, delaiEntreVariations);
     }
 
 
 
+    public void StartCompteur(float premierDelai = 1, float delaiRepetitif = 1)
+    {
+        InvokeRepeating(nameof(UpdateCompteur), premierDelai, delaiRepetitif);
+    }
+    public void WriteCompteur(object obj)
+    {
+        text.text = obj.ToString();
+    }
     public void UpdateCompteur()
     {
         valeur += variation;
-        text.text = valeur.ToString();
+        WriteCompteur(valeur);
         if (valeur == fin)
         {
             CancelInvoke(nameof(UpdateCompteur));
             GameManager.Instance.MinigameEnd();
         }
+    }
+    public void ResetCompteur()
+    {
+        valeur = depart;
+        CancelInvoke(nameof(UpdateCompteur));
+    }
+    public void RestartCompteur()
+    {
+        ResetCompteur();
+        StartCompteur(delaiPremiereVariation, delaiEntreVariations);
     }
 }

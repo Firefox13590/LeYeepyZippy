@@ -11,12 +11,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static Action OnMinigameStart, OnMinigameEnd;
 
-    public int PlayerCount => players.Count;
+    public List<GameObject> Players { get; private set; }
+    public int PlayerCount => Players.Count;
     public List<Camera> Cameras { get; private set; }
+    public List<GameObject> MinigameBehaviours { get; private set; }
 
     [SerializeField, ReadOnly] SceneType currentSceneType;
 
-    List<GameObject> players;
 
     private void Awake()
     {
@@ -29,9 +30,11 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        OnSceneChange(SceneManager.GetActiveScene());
     }
+    //private void Start()
+    //{
+    //    OnSceneChange(SceneManager.GetActiveScene());
+    //}
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneChange;
@@ -46,8 +49,14 @@ public class GameManager : MonoBehaviour
     private void Init()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+
+        Players = GameObject.FindGameObjectsWithTag("Player").ToList();
         Cameras = FindObjectsByType<Camera>().ToList();
+        MinigameBehaviours = GameObject.FindGameObjectsWithTag("MinigameBehaviour").ToList();
+
+        //foreach (var item in Players) Debug.Log(item, item);
+        //foreach (var item in Cameras) Debug.Log(item, item);
+        //foreach (var item in MinigameBehaviours) Debug.Log(item, item);
 
         MinigameStart();
     }
