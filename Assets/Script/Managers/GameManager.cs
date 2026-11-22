@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         currentSceneType = Enum.TryParse(scene.name, true, out SceneType result) ? result : SceneType.None;
         if (currentSceneType == SceneType.None)
         {
-            Debug.LogError("Le nom de la scène n'est pas reconnue. Assurez-vous que le nom match les valeurs du Enum SceneType sauf SceneType.None");
+            Debug.LogError("Le nom de la scï¿½ne n'est pas reconnue. Assurez-vous que le nom match les valeurs du Enum SceneType sauf SceneType.None");
             return;
         }
 

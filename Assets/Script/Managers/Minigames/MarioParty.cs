@@ -10,7 +10,7 @@ public class MarioParty : MonoBehaviour
     [Header("Affectation dans l'inspecteur")]
     [SerializeField, Min(1f)]
     float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
-    [SerializeField, Tooltip("Mettre le conteneur et non les éléments")]
+    [SerializeField, Tooltip("Mettre le conteneur et non les ï¿½lï¿½ments")]
     GameObject[] plateformes, boutonsSelectionPlateformes;
     [SerializeField] GeneralSpawner spawner;
 
@@ -29,6 +29,9 @@ public class MarioParty : MonoBehaviour
         isUp = true,
         isGoingUp = false;
     bool canUpdateTargetPlatform = true;
+
+    bool
+        canUpdateTargetPlatform = true;
 
     private void Awake()
     {
