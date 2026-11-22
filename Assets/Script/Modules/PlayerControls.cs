@@ -25,6 +25,7 @@ public class PlayerControls : MonoBehaviour
     Vector3 moveInput, lookInput;
     float interactInput;
     RaycastHit hit;
+    bool isDead = false;
 
     private void Awake()
     {
@@ -106,8 +107,13 @@ public class PlayerControls : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Death"))
         {
+            if (!isDead) OnPlayerDeath?.Invoke(gameObject);
+
+            isDead = true;
             canMove = false;
+
             rb.constraints = RigidbodyConstraints.None;
+            cam.gameObject.SetActive(false);
 
             Vector3 ragdollForce, ragdollTorque;
             ragdollForce = new Vector3(
@@ -126,7 +132,6 @@ public class PlayerControls : MonoBehaviour
             rb.AddTorque(ragdollTorque * mvtSpeed, ForceMode.Impulse);
             //rb.AddTorque(ragdollTorque);
 
-            OnPlayerDeath?.Invoke(gameObject);
             Invoke(nameof(Death), 10f);
         }
     }
