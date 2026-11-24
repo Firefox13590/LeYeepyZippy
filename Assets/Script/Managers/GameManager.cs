@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,17 +32,15 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    //private void Start()
-    //{
-    //    OnSceneChange(SceneManager.GetActiveScene());
-    //}
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneChange;
+        InputSystem.onDeviceChange += OnDeviceChange;
     }
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneChange;
+        InputSystem.onDeviceChange -= OnDeviceChange;
     }
 
 
@@ -71,6 +70,19 @@ public class GameManager : MonoBehaviour
         }
 
         Init();
+    }
+    void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        switch (change)
+        {
+            case InputDeviceChange.Added:
+            case InputDeviceChange.Reconnected:
+                Debug.Log($"Device connected: {device.displayName}");
+                break;
+            case InputDeviceChange.Disconnected:
+                Debug.Log($"Device disconnected: {device.displayName}");
+                break;
+        }
     }
 
     void ChangeScene(int scene)
