@@ -14,7 +14,6 @@ public class MarioParty : MonoBehaviour
     [SerializeField, Tooltip("Mettre le conteneur et non les �l�ments")]
     GameObject[] plateformes, boutonsSelectionPlateformes;
     [SerializeField] GameObject bordureCouleur;
-    [SerializeField] GeneralSpawner spawner;
 
     [Header("Visualisation des variables")]
     [ReadOnly] public GameObject boutonHighlight = null;
@@ -196,6 +195,6 @@ public class MarioParty : MonoBehaviour
 
     void AddSpectator(GameObject _)
     {
-        spawner.SpawnObject(0, false, false, false, true);
+        GeneralSpawner.Instance.SpawnObject(0, false, false, false, true);
     }
 }

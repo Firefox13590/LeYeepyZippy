@@ -4,8 +4,22 @@ using Random = UnityEngine.Random;
 
 public class GeneralSpawner : MonoBehaviour
 {
+    public static GeneralSpawner Instance;
+
     [SerializeField] GameObject[] spawnObjects;
     [SerializeField] GameObject[] spawnAreas;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     //private void Start()
     //{
@@ -30,7 +44,7 @@ public class GeneralSpawner : MonoBehaviour
         return obj.transform.TransformPoint(mesh.vertices[Random.Range(0, mesh.vertexCount)]);
     }
 
-    public void SpawnObject(int indexObject, int indexArea, Vector3 position, Transform parent, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea, bool justPlaceInstance)
+    public GameObject SpawnObject(int indexObject, int indexArea, Vector3 position, Transform parent, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea, bool justPlaceInstance)
     {
         if (
             indexObject >= spawnObjects.Length |
@@ -44,10 +58,11 @@ public class GeneralSpawner : MonoBehaviour
         int
             finalPosObj = indexObject,
             finalPosArea = indexArea;
+        GameObject instance = null;
 
         if (justPlaceInstance)
         {
-            Instantiate(spawnObjects[finalPosObj], position, Quaternion.identity, parent);
+            instance = Instantiate(spawnObjects[finalPosObj], position, Quaternion.identity, parent);
         }
         else if (spawnEachObject && spawnOnEachArea)
         {
@@ -56,7 +71,7 @@ public class GeneralSpawner : MonoBehaviour
             {
                 finalPosObj = (spawnRandomObject) ? Random.Range(0, spawnObjects.Length) : i;
                 finalPosArea = (spawnOnRandomArea) ? Random.Range(0, spawnAreas.Length) : i;
-                Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
+                instance = Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
             }
         }
         else if (spawnEachObject)
@@ -64,7 +79,7 @@ public class GeneralSpawner : MonoBehaviour
             for (int i = 0; i < spawnObjects.Length; i++)
             {
                 finalPosObj = (spawnRandomObject) ? Random.Range(0, spawnObjects.Length) : i;
-                Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
+                instance = Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
             }
         }
         else if (spawnOnEachArea)
@@ -72,29 +87,31 @@ public class GeneralSpawner : MonoBehaviour
             for (int i = 0; i < spawnObjects.Length; i++)
             {
                 finalPosArea = (spawnOnRandomArea) ? Random.Range(0, spawnAreas.Length) : i;
-                Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
+                instance = Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
             }
         }
         else
         {
             finalPosObj = (spawnRandomObject) ? Random.Range(0, spawnObjects.Length) : indexObject;
             finalPosArea = (spawnOnRandomArea) ? Random.Range(0, spawnAreas.Length) : indexArea;
-            Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
+            instance = Instantiate(spawnObjects[finalPosObj], SelectRandomMeshVertex(spawnAreas[finalPosArea]), Quaternion.identity, parent);
         }
+
+        return instance;
     }
-    public void SpawnObject(int index) => SpawnObject(index, index, new Vector3(), null, false, false, false, false, false);
-    public void SpawnObject(Vector3 position) => SpawnObject(0, 0, position, null, false, false, false, false, true);
-    public void SpawnObject(int index, Vector3 position) => SpawnObject(index, index, position, null, false, false, false, false, true);
-    public void SpawnObject(int index, Transform parent) => SpawnObject(index, index, new Vector3(), parent, false, false, false, false, false);
-    public void SpawnObject(Vector3 position, Transform parent) => SpawnObject(0, 0, position, parent, false, false, false, false, true);
-    public void SpawnObject(int index, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
+    public GameObject SpawnObject(int index) => SpawnObject(index, index, new Vector3(), null, false, false, false, false, false);
+    public GameObject SpawnObject(Vector3 position) => SpawnObject(0, 0, position, null, false, false, false, false, true);
+    public GameObject SpawnObject(int index, Vector3 position) => SpawnObject(index, index, position, null, false, false, false, false, true);
+    public GameObject SpawnObject(int index, Transform parent) => SpawnObject(index, index, new Vector3(), parent, false, false, false, false, false);
+    public GameObject SpawnObject(Vector3 position, Transform parent) => SpawnObject(0, 0, position, parent, false, false, false, false, true);
+    public GameObject SpawnObject(int index, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
         SpawnObject(index, index, new Vector3(), null, spawnEachObject, spawnOnEachArea, spawnRandomObject, spawnOnRandomArea, false);
-    public void SpawnObject(int index, Transform parent, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
+    public GameObject SpawnObject(int index, Transform parent, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
         SpawnObject(index, index, new Vector3(), parent, spawnEachObject, spawnOnEachArea, spawnRandomObject, spawnOnRandomArea, false);
-    public void SpawnObject(int indexObject, int indexArea) => SpawnObject(indexObject, indexArea, new Vector3(), null, false, false, false, false, false);
-    public void SpawnObject(int indexObject, int indexArea, Transform parent) => SpawnObject(indexObject, indexArea, new Vector3(), parent, false, false, false, false, false);
-    public void SpawnObject(int indexObject, int indexArea, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
+    public GameObject SpawnObject(int indexObject, int indexArea) => SpawnObject(indexObject, indexArea, new Vector3(), null, false, false, false, false, false);
+    public GameObject SpawnObject(int indexObject, int indexArea, Transform parent) => SpawnObject(indexObject, indexArea, new Vector3(), parent, false, false, false, false, false);
+    public GameObject SpawnObject(int indexObject, int indexArea, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
         SpawnObject(indexObject, indexArea, new Vector3(), null, spawnEachObject, spawnOnEachArea, spawnRandomObject, spawnOnRandomArea, false);
-    public void SpawnObject(int indexObject, int indexArea, Transform parent, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
+    public GameObject SpawnObject(int indexObject, int indexArea, Transform parent, bool spawnEachObject, bool spawnOnEachArea, bool spawnRandomObject, bool spawnOnRandomArea) =>
         SpawnObject(indexObject, indexArea, new Vector3(), parent, spawnEachObject, spawnOnEachArea, spawnRandomObject, spawnOnRandomArea, false);
 }

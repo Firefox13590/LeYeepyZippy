@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public List<Camera> Cameras { get; private set; }
     public List<GameObject> MinigameBehaviours { get; private set; }
 
-    [SerializeField, ReadOnly] SceneType currentSceneType;
+    [SerializeField, ReadOnly] SceneType sceneType;
 
 
     private void Awake()
@@ -36,11 +36,15 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneChange;
         InputSystem.onDeviceChange += OnDeviceChange;
+        PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
+        PlayerInputManager.instance.onPlayerLeft += OnPlayerLeft;
     }
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneChange;
         InputSystem.onDeviceChange -= OnDeviceChange;
+        PlayerInputManager.instance.onPlayerJoined -= OnPlayerJoined;
+        PlayerInputManager.instance.onPlayerLeft -= OnPlayerLeft;
     }
 
 
@@ -49,10 +53,15 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
 
+        if (sceneType == SceneType.MarioParty)
+        {
+            GeneralSpawner.Instance.SpawnObject(0, new Vector3(12, 11.5f, 0));
+            GeneralSpawner.Instance.SpawnObject(0, 4);
+        }
+
         Players = GameObject.FindGameObjectsWithTag("Player").ToList();
         Cameras = FindObjectsByType<Camera>().ToList();
         MinigameBehaviours = GameObject.FindGameObjectsWithTag("MinigameBehaviour").ToList();
-
         //foreach (var item in Players) Debug.Log(item, item);
         //foreach (var item in Cameras) Debug.Log(item, item);
         //foreach (var item in MinigameBehaviours) Debug.Log(item, item);
@@ -62,8 +71,8 @@ public class GameManager : MonoBehaviour
 
     void OnSceneChange(Scene scene, LoadSceneMode _ = 0)
     {
-        currentSceneType = Enum.TryParse(scene.name, true, out SceneType result) ? result : SceneType.None;
-        if (currentSceneType == SceneType.None)
+        sceneType = Enum.TryParse(scene.name, true, out SceneType result) ? result : SceneType.None;
+        if (sceneType == SceneType.None)
         {
             Debug.LogError("Le nom de la sc�ne n'est pas reconnue. Assurez-vous que le nom match les valeurs du Enum SceneType sauf SceneType.None");
             return;
@@ -83,6 +92,14 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"Device disconnected: {device.displayName}");
                 break;
         }
+    }
+    void OnPlayerJoined(PlayerInput playerInput)
+    {
+        Debug.Log($"{playerInput} has joined");
+    }
+    void OnPlayerLeft(PlayerInput playerInput)
+    {
+        Debug.Log($"{playerInput} has left");
     }
 
     void ChangeScene(int scene)
