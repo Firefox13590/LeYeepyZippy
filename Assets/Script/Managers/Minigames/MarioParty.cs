@@ -2,6 +2,7 @@ using Data;
 using NaughtyAttributes;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MarioParty : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class MarioParty : MonoBehaviour
     float cooldownDuration = 3, downtimeDuration = 3, dureeMvt = 2.5f;
     [SerializeField, Tooltip("Mettre le conteneur et non les �l�ments")]
     GameObject[] plateformes, boutonsSelectionPlateformes;
-    [SerializeField] GeneralSpawner spawner;
+    [SerializeField] GameObject bordureCouleur;
 
     [Header("Visualisation des variables")]
     [ReadOnly] public GameObject boutonHighlight = null;
@@ -29,9 +30,6 @@ public class MarioParty : MonoBehaviour
         isUp = true,
         isGoingUp = false;
     bool canUpdateTargetPlatform = true;
-
-    bool
-        canUpdateTargetPlatform = true;
 
     private void Awake()
     {
@@ -140,6 +138,8 @@ public class MarioParty : MonoBehaviour
 
                 canUpdateTargetPlatform = true;
                 targetPlateform = -1;
+
+                UpdateBordureCouleur();
             }
         }
         else if (isDown && downtime > 0)
@@ -176,12 +176,25 @@ public class MarioParty : MonoBehaviour
         {
             targetPlateform = Array.IndexOf(boutonsSelectionPlateformes, boutonHighlight);
             boutonsSelectionPlateformes[targetPlateform].GetComponent<Animator>().SetTrigger("PlayAnimation");
+            UpdateBordureCouleur();
+
             canUpdateTargetPlatform = false;
+
+        }
+    }
+
+    void UpdateBordureCouleur()
+    {
+        for (int i = 0; i < bordureCouleur.transform.childCount; i++)
+        {
+            bordureCouleur.transform.GetChild(i).GetComponent<Image>().color = (targetPlateform >= 0) ?
+                boutonHighlight.transform.GetChild(2).GetChild(0).GetComponent<MeshRenderer>().material.color :
+                Color.white;
         }
     }
 
     void AddSpectator(GameObject _)
     {
-        spawner.SpawnObject(0, false, false, false, true);
+        GeneralSpawner.Instance.SpawnObject(0, false, false, false, true);
     }
 }
