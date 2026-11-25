@@ -13,7 +13,7 @@ public class InfiniteGround : MonoBehaviour
     {
         if (other.gameObject.CompareTag("trigger"))
         {
-            Instantiate(questions, new Vector3(1.99f, 0, 3f), Quaternion.identity);
+            //Instantiate(questions, new Vector3(1.99f, 0, 3f), Quaternion.identity);
         }
     }
 }
