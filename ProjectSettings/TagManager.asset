@@ -32,6 +32,8 @@ TagManager:
   - QDSUIToggleCheckboxRadio
   - QDSUIToggleThumbnail
   - Anchor
+  - Death
+  - MinigameBehaviour
   layers:
   - Default
   - TransparentFX
@@ -43,7 +45,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Outline
   - 
   - 
   - 
