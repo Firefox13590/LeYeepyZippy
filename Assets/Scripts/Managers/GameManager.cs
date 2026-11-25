@@ -34,6 +34,13 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void Start()
+    {
+        for (int i = 0; i < InputSystem.devices.Count; i++)
+        {
+            Debug.Log(InputSystem.devices[i].displayName);
+        }
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneChange;
@@ -41,6 +48,7 @@ public class GameManager : MonoBehaviour
         PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
         PlayerInputManager.instance.onPlayerLeft += OnPlayerLeft;
     }
+
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneChange;
@@ -93,6 +101,8 @@ public class GameManager : MonoBehaviour
             case InputDeviceChange.Added:
             case InputDeviceChange.Reconnected:
                 Debug.Log($"Device connected: {device.displayName}");
+                Debug.Log(device.deviceId);
+                Debug.Log(device.layout);
                 break;
             case InputDeviceChange.Disconnected:
                 Debug.Log($"Device disconnected: {device.displayName}");
@@ -102,24 +112,25 @@ public class GameManager : MonoBehaviour
     void OnPlayerJoined(PlayerInput playerInput)
     {
         Debug.Log($"{playerInput} has joined");
+        Debug.Log(PlayerInput.all.Count);
         Debug.Log(playerInput.name);
         Debug.Log(playerInput.playerIndex);
         Debug.Log(playerInput.currentControlScheme);
-        Debug.Log(playerInput.actions);
-        foreach (var item in playerInput.actions)
-        {
-            Debug.Log(item);
-        }
-        Debug.Log(playerInput.actionEvents);
-        for (int i = 0; i < playerInput.actionEvents.Count; i++)
-        {
-            Debug.Log(playerInput.actionEvents[i]);
-        }
-        Debug.Log(playerInput.currentActionMap);
-        foreach (var item in playerInput.currentActionMap)
-        {
-            Debug.Log(item);
-        }
+        //Debug.Log(playerInput.actions);
+        //foreach (var item in playerInput.actions)
+        //{
+        //    Debug.Log(item);
+        //}
+        //Debug.Log(playerInput.actionEvents);
+        //for (int i = 0; i < playerInput.actionEvents.Count; i++)
+        //{
+        //    Debug.Log(playerInput.actionEvents[i]);
+        //}
+        //Debug.Log(playerInput.currentActionMap);
+        //foreach (var item in playerInput.currentActionMap)
+        //{
+        //    Debug.Log(item);
+        //}
         Debug.Log(playerInput.devices);
         for (int i = 0; i < playerInput.devices.Count; i++)
         {
@@ -154,5 +165,11 @@ public class GameManager : MonoBehaviour
     {
         OnMinigameEnd?.Invoke();
         Invoke(nameof(ChangeScene), 5);
+    }
+
+    public void SwitchPlayer(GameObject player)
+    {
+        PlayerInput pi = player.GetComponent<PlayerInput>();
+        PlayerInputManager.instance.JoinPlayer(pi.playerIndex, controlScheme: pi.currentControlScheme, pairWithDevices: pi.devices.ToArray());
     }
 }

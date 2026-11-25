@@ -196,5 +196,6 @@ public class MarioParty : MonoBehaviour
     void AddSpectator(GameObject _)
     {
         GeneralSpawner.Instance.SpawnObject(0, false, false, false, true);
+        //GameManager.Instance.SwitchPlayer(_);
     }
 }

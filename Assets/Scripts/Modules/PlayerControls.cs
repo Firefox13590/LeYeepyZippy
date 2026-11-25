@@ -18,9 +18,12 @@ public class PlayerControls : MonoBehaviour
     [Header("Visualisation des variables")]
     [SerializeField, ReadOnly]
     bool canMove = true;
+    [SerializeField, ReadOnly]
+    int playerIndex;
 
     Camera cam;
     Rigidbody rb;
+    PlayerInput pi;
     InputAction moveAction, lookAction, interactAction;
     Vector3 moveInput, lookInput;
     float interactInput;
@@ -29,14 +32,19 @@ public class PlayerControls : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         cam = transform.GetChild(0).GetComponent<Camera>();
         rb = GetComponent<Rigidbody>();
+        pi = GetComponent<PlayerInput>();
 
         moveAction = InputSystem.actions.FindAction("Player/Move");
         lookAction = InputSystem.actions.FindAction("Player/Look");
         interactAction = InputSystem.actions.FindAction("Player/Interact");
 
-        //canMove = isHost;
+        playerIndex = pi.playerIndex;
+        Debug.Log(playerIndex);
+        Debug.Log(GetComponent<PlayerInput>().currentControlScheme);
     }
     private void OnEnable()
     {
