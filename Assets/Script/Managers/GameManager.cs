@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField, ReadOnly] SceneType sceneType;
 
+    bool minigameStarted = false;
 
     private void Awake()
     {
@@ -55,8 +57,8 @@ public class GameManager : MonoBehaviour
 
         if (sceneType == SceneType.MarioParty)
         {
-            GeneralSpawner.Instance.SpawnObject(0, new Vector3(12, 11.5f, 0));
-            GeneralSpawner.Instance.SpawnObject(0, 4);
+            //GeneralSpawner.Instance.SpawnObject(0, new Vector3(12, 11.5f, 0));
+            //GeneralSpawner.Instance.SpawnObject(0, new Vector3(Random.Range(-3, 4), 3, Random.Range(-3, 4)));
         }
 
         Players = GameObject.FindGameObjectsWithTag("Player").ToList();
@@ -64,9 +66,13 @@ public class GameManager : MonoBehaviour
         MinigameBehaviours = GameObject.FindGameObjectsWithTag("MinigameBehaviour").ToList();
         //foreach (var item in Players) Debug.Log(item, item);
         //foreach (var item in Cameras) Debug.Log(item, item);
-        //foreach (var item in MinigameBehaviours) Debug.Log(item, item);
+        foreach (var item in MinigameBehaviours)
+        {
+            //Debug.Log(item, item);
+            item.SetActive(false);
+        }
 
-        MinigameStart();
+        //MinigameStart();
     }
 
     void OnSceneChange(Scene scene, LoadSceneMode _ = 0)
@@ -96,6 +102,31 @@ public class GameManager : MonoBehaviour
     void OnPlayerJoined(PlayerInput playerInput)
     {
         Debug.Log($"{playerInput} has joined");
+        Debug.Log(playerInput.name);
+        Debug.Log(playerInput.playerIndex);
+        Debug.Log(playerInput.currentControlScheme);
+        Debug.Log(playerInput.actions);
+        foreach (var item in playerInput.actions)
+        {
+            Debug.Log(item);
+        }
+        Debug.Log(playerInput.actionEvents);
+        for (int i = 0; i < playerInput.actionEvents.Count; i++)
+        {
+            Debug.Log(playerInput.actionEvents[i]);
+        }
+        Debug.Log(playerInput.currentActionMap);
+        foreach (var item in playerInput.currentActionMap)
+        {
+            Debug.Log(item);
+        }
+        Debug.Log(playerInput.devices);
+        for (int i = 0; i < playerInput.devices.Count; i++)
+        {
+            Debug.Log(playerInput.devices[i]);
+        }
+
+        if (!minigameStarted) MinigameStart();
     }
     void OnPlayerLeft(PlayerInput playerInput)
     {
@@ -111,7 +142,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void MinigameStart() => OnMinigameStart?.Invoke();
+    public void MinigameStart()
+    {
+        OnMinigameStart?.Invoke();
+        foreach (var item in MinigameBehaviours)
+        {
+            item.SetActive(true);
+        }
+    }
     public void MinigameEnd()
     {
         OnMinigameEnd?.Invoke();
