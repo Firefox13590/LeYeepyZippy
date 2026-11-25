@@ -13,6 +13,11 @@ public class AvatarXRTracking : MonoBehaviour
     public Transform leftHandTarget;
     public Transform rightHandTarget;
 
+    private void Awake()
+    {
+        Debug.Log("Plateforme:" + Application.platform);
+    }
+
     void Update()
     {
         if (xrHead != null && headTarget != null)
