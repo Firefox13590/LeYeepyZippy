@@ -277,6 +277,7 @@ MonoBehaviour:
   - {fileID: -5846204083251516878}
   - {fileID: -727028139579209912}
   - {fileID: -7509339962472262285}
+  - {fileID: 718193277612699046}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 1
@@ -1630,7 +1631,7 @@ MonoBehaviour:
   - {fileID: 4788061327706520138}
   - {fileID: -7410606360739268580}
   - {fileID: -1823295083527812804}
-  - {fileID: -8108097480628533113}
+  - {fileID: 0}
 --- !u!114 &47748510532588368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1791,6 +1792,30 @@ MonoBehaviour:
   customRuntimeLoaderName: 
   m_CameraImageSupport: 0
   m_PassthroughPreSplashScreen: 0
+--- !u!114 &718193277612699046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b9faa4029cc43c6a88d12cc2c8dd36, type: 3}
+  m_Name: HandTrackingDataSourceFeature Android
+  m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.HandTrackingDataSourceFeature
+  m_enabled: 0
+  nameUi: Hand Tracking Data Source
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.handtrackingdatasource
+  openxrExtensionStrings: XR_EXT_hand_tracking_data_source
+  company: Unity
+  priority: -101
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
+  m_LeftHandPreference: 2
+  m_RightHandPreference: 2
 --- !u!114 &906705057506775683
 MonoBehaviour:
   m_ObjectHideFlags: 0

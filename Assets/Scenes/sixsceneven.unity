@@ -408,6 +408,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 1079
+      objectReference: {fileID: 0}
     - target: {fileID: 657184242161839408, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.02
@@ -2567,6 +2571,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bean_Cowboy_01
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2614,8 +2622,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2107844177}
   m_SourcePrefab: {fileID: 100100000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
+--- !u!1 &1240835242 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
+  m_PrefabInstance: {fileID: 1240835241}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1313201519
 GameObject:
   m_ObjectHideFlags: 0
@@ -3841,6 +3857,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
   m_PrefabInstance: {fileID: 1240835241}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2107844177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240835242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5a7f6dd44a80e64693ead1f64efe6bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraJoueur
+  cameraTransform: {fileID: 190371402}
 --- !u!1 &2136602363
 GameObject:
   m_ObjectHideFlags: 0
